@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -13,7 +14,7 @@ import Timer from "./Timer";
 
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-
+import { saveQusAns, saveSelectedAns } from "../../features/qusSlice";
 const ModelTest = ({
   qusnumbervalue,
   setQusnumbervalue,
@@ -22,75 +23,57 @@ const ModelTest = ({
   data,
 }) => {
   const [value, setValue] = useState();
+  console.log(value, "value");
+  const { data: qusAnsdata } = useSelector((store) => store.qusAns);
+  const dispatch = useDispatch();
 
-  // console.log(timevalue, "timevalue");
   const [checkvalue, setCheckValue] = useState("");
 
   const [error, setError] = React.useState(false);
-  const [helperText, setHelperText] = React.useState("Choose wisely");
+
   const [timeOut, setTimeOut] = useState(false);
 
   const qusdata = data.slice(0, qusnumbervalue);
-  // console.log(qusdata);
-  /*  function qusvalueslider(qusvalue) {
-    setQusnumbervalue(qusvalue);
-    // console.log(qusvalue);
-    return `${qusvalue}`;
-  }
-  function timevalueslider(timevalue) {
-    setTimevalue(timevalue);
-    // console.log(qusvalue);
 
-    return `${timevalue}`;
-  } */
-  /*  const handletimechange = () => {
-    function timevalueslider(timevalue) {
-      setTimevalue(timevalue);
-      // console.log(qusvalue);
-      return `${timevalue}`;
-    }
-  }; */
   const handleRadioChange = (event) => {
     setValue(event.target.value);
-    // rightanswer.push(event.target.value);
-    // setCheckValue(checkvalue);
-    setHelperText(" ");
+
     setError(false);
   };
 
-  var rightanswer = [];
-  // console.log(rightanswer);
   const handleSubmit = (event) => {
     event.preventDefault();
-    // rightanswer.push(value);
+
     if (checkvalue === true) {
-      setHelperText("You got it!");
       setScore(score + 1);
       setError(false);
     } else {
-      setHelperText("Sorry, wrong answer!");
       setError(true);
     }
     setValue();
   };
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // console.log(currentQuestion);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
-  const handleAnswerOptionClick = (isCorrect) => {
-    setHelperText("");
-    /*    if (isCorrect) {
-      setScore(score + 1);
-    } */
 
+  const handleAnswerOptionClick = (isCorrect) => {
+    dispatch(saveQusAns(qusdata[currentQuestion]));
+    dispatch(saveSelectedAns(value));
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < qusdata.length) {
       setCurrentQuestion(nextQuestion);
-      setHelperText();
     } else {
       setShowScore(true);
       setTimeOut(true);
     }
   };
+  const cleardata = () => {
+    localStorage.clear();
+  };
+  const qustions = JSON.parse(localStorage.getItem("QusAns"));
+  const selectAns = JSON.parse(localStorage.getItem("selectAns"));
+  console.log(qustions, selectAns);
   return (
     <Container style={{}}>
       <div
@@ -104,18 +87,6 @@ const ModelTest = ({
         <h4>BCS Preli Model Test </h4>
         <div className="question-count">
           <span>Question No: {currentQuestion + 1}</span>/{qusdata.length}
-          {/*      <Box sx={{ width: 300 }}>
-            <Slider
-              aria-label="Question Numbers"
-              defaultValue={10}
-              getAriaValueText={qusvalueslider}
-              valueLabelDisplay="auto"
-              step={5}
-              marks
-              min={10}
-              max={data.length}
-            />
-          </Box> */}
         </div>
       </div>
 
@@ -131,10 +102,10 @@ const ModelTest = ({
           <h3>
             You scored {score} out of {qusdata.length}
           </h3>
-
+          <button onClick={cleardata}>start again</button>
           <p>Right ansawers are</p>
 
-          {qusdata.map((mcqs) => (
+          {qustions.map((mcqs) => (
             <div style={{ textAlign: "left" }}>
               <h5> Question: {mcqs.question} </h5>
               {/*    {mcqs.answers.map((ans) => (
