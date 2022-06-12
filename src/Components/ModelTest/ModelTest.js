@@ -23,7 +23,7 @@ const ModelTest = ({
   data,
 }) => {
   const [value, setValue] = useState();
-  console.log(value, "value");
+  // console.log(value, "value");
   const { data: qusAnsdata } = useSelector((store) => store.qusAns);
   const dispatch = useDispatch();
 
@@ -58,8 +58,7 @@ const ModelTest = ({
   const [score, setScore] = useState(0);
 
   const handleAnswerOptionClick = (isCorrect) => {
-    dispatch(saveQusAns(qusdata[currentQuestion]));
-    dispatch(saveSelectedAns(value));
+    dispatch(saveQusAns({ qsn: qusdata[currentQuestion], ans: value }));
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < qusdata.length) {
       setCurrentQuestion(nextQuestion);
@@ -71,9 +70,8 @@ const ModelTest = ({
   const cleardata = () => {
     localStorage.clear();
   };
-  const qustions = JSON.parse(localStorage.getItem("QusAns"));
-  const selectAns = JSON.parse(localStorage.getItem("selectAns"));
-  console.log(qustions, selectAns);
+  const questions = JSON.parse(localStorage.getItem("QusAns"));
+  console.log(questions);
   return (
     <Container style={{}}>
       <div
@@ -105,32 +103,44 @@ const ModelTest = ({
           <button onClick={cleardata}>start again</button>
           <p>Right ansawers are</p>
 
-          {qustions.map((mcqs) => (
+          {questions.map((mcqs) => (
             <div style={{ textAlign: "left" }}>
-              <h5> Question: {mcqs.question} </h5>
+              {/* <h5> Question: {mcqs.selectAns} </h5> */}
+              <h5> Question: {mcqs.qsn.question} </h5>
+              {/* <h5> Question: {mcqs.qsn} </h5> */}
+              {/* <h5> Question: {mcqs} </h5> */}
+              {/* console.log(mcqs); */}
               {/*    {mcqs.answers.map((ans) => (
                 <div style={{ color: "#00ff00" }}>
                   <input type="radio" defaultValue={ans.text} name="" id="" />
                 </div>
               ))} */}
-              {mcqs.answers.map((ans) => (
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    // value={value}
-                    //  onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value={ans.text}
-                      disabled
-                      control={<Radio />}
-                      label={ans.text}
-                    />
-                  </RadioGroup>
-                </FormControl>
-              ))}
-              {mcqs.answers.map((ans) => (
+
+              <div>
+                {mcqs.qsn.answers.map((ans) => (
+                  <div>
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        checked={ans.text === mcqs.selectAns}
+                        // value={value}
+                        //  onChange={handleChange}
+                      >
+                        <FormControlLabel
+                          //  value={ans.text}
+                          // disabled
+
+                          control={<Radio />}
+                          label={ans.text}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                ))}
+              </div>
+
+              {mcqs.qsn.answers.map((ans) => (
                 <div style={{ color: "#00ff00" }}>
                   {ans.correct === true && <h6> Answer is :{ans.text}</h6>}
                 </div>

@@ -7,20 +7,15 @@ const qusSlice = createSlice({
     data: data,
     selectAns: [],
   },
+
   reducers: {
     saveQusAns: (state, action) => {
-        
-      state.qusData.push(action.payload);
+      state.qusData.push({
+        qsn: action.payload.qsn,
+        selectAns: action.payload.ans,
+      });
 
       localStorage.setItem("QusAns", JSON.stringify(state.qusData));
-    },
-    saveSelectedAns: (state, action) => {
-      state.selectAns.push(action.payload);
-
-      localStorage.setItem("selectAns", JSON.stringify(state.selectAns));
-    },
-    correctAnswer: (state, action) => {
-        // state.qusData.map
     },
   },
 });
