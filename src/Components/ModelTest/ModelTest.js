@@ -11,11 +11,11 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { pink, red, lightGreen } from "@mui/material/colors";
 import Timer from "./Timer";
-
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { saveQusAns, saveSelectedAns } from "../../features/qusSlice";
 import { Grid } from "@mui/material";
+
 const ModelTest = ({
   qusnumbervalue,
   setQusnumbervalue,
@@ -24,16 +24,14 @@ const ModelTest = ({
   data,
 }) => {
   const [value, setValue] = useState();
-  // console.log(value, "value");
   const { data: qusAnsdata } = useSelector((store) => store.qusAns);
   const dispatch = useDispatch();
-
   const [checkvalue, setCheckValue] = useState("");
-
   const [error, setError] = React.useState(false);
-
   const [timeOut, setTimeOut] = useState(false);
-
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
   const qusdata = data.slice(0, qusnumbervalue);
 
   const handleRadioChange = (event) => {
@@ -53,10 +51,6 @@ const ModelTest = ({
     }
     setValue();
   };
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  // console.log(currentQuestion);
-  const [showScore, setShowScore] = useState(false);
-  const [score, setScore] = useState(0);
 
   const handleAnswerOptionClick = (isCorrect) => {
     dispatch(saveQusAns({ qsn: qusdata[currentQuestion], ans: value }));
@@ -68,12 +62,16 @@ const ModelTest = ({
       setTimeOut(true);
     }
   };
+
   const cleardata = () => {
     localStorage.clear();
     refreshPage();
   };
   const refreshPage = () => {
     window.location.reload(false);
+  };
+  window.onbeforeunload = function (e) {
+    localStorage.clear();
   };
   const questions = JSON.parse(localStorage.getItem("QusAns"));
 
@@ -117,17 +115,7 @@ const ModelTest = ({
 
           {questions.map((mcqs) => (
             <div style={{ textAlign: "left" }}>
-              {/* <h5> Question: {mcqs.selectAns} </h5> */}
               <h5> Question: {mcqs.qsn.question} </h5>
-              {/* <h5> Question: {mcqs.qsn} </h5> */}
-              {/* <h5> Question: {mcqs} </h5> */}
-              {/* console.log(mcqs); */}
-              {/*    {mcqs.answers.map((ans) => (
-                <div style={{ color: "#00ff00" }}>
-                  <input type="radio" defaultValue={ans.text} name="" id="" />
-                </div>
-              ))} */}
-
               <Grid container spacing={3}>
                 {mcqs.qsn.answers.map((ans) => (
                   <div
@@ -187,7 +175,6 @@ const ModelTest = ({
                           aria-labelledby="demo-controlled-radio-buttons-group"
                           name="controlled-radio-buttons-group"
                           value={value}
-                          //  onChange={handleChange}
                         >
                           <FormControlLabel
                             value={ans.text}
@@ -229,8 +216,6 @@ const ModelTest = ({
                 aria-labelledby="demo-error-radios"
                 name="quiz"
                 value={value}
-                // checkvalue={checkvalue}
-
                 onChange={handleRadioChange}
               >
                 {qusdata[currentQuestion].answers.map((answerOption) => (
@@ -244,15 +229,8 @@ const ModelTest = ({
                   </>
                 ))}
               </RadioGroup>
-              {/*    <FormHelperText
-                style={{ textAlign: "right", marginLeft: "500px" }}
-              >
-                {helperText}
-              </FormHelperText> */}
+
               <div style={{ display: "flex" }}>
-                {/*  <Button sx={{ mt: 1, mr: 1 }} type="submit" variant="contained">
-                  Check Answer
-                </Button> */}
                 {value && (
                   <Button
                     sx={{ mt: 1, ml: 5 }}
