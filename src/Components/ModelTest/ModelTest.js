@@ -9,12 +9,13 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-
+import { pink, red, lightGreen } from "@mui/material/colors";
 import Timer from "./Timer";
 
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { saveQusAns, saveSelectedAns } from "../../features/qusSlice";
+import { Grid } from "@mui/material";
 const ModelTest = ({
   qusnumbervalue,
   setQusnumbervalue,
@@ -69,9 +70,13 @@ const ModelTest = ({
   };
   const cleardata = () => {
     localStorage.clear();
+    refreshPage();
+  };
+  const refreshPage = () => {
+    window.location.reload(false);
   };
   const questions = JSON.parse(localStorage.getItem("QusAns"));
-  console.log(questions);
+
   return (
     <Container style={{}}>
       <div
@@ -97,11 +102,18 @@ const ModelTest = ({
       {showScore || timeOut ? (
         <div className="score-section">
           <br />
+          <Button
+            variant="outlined"
+            style={{ float: "right" }}
+            onClick={cleardata}
+          >
+            start again
+          </Button>
           <h3>
             You scored {score} out of {qusdata.length}
           </h3>
-          <button onClick={cleardata}>start again</button>
-          <p>Right ansawers are</p>
+
+          <p>View The Right ansawers</p>
 
           {questions.map((mcqs) => (
             <div style={{ textAlign: "left" }}>
@@ -116,33 +128,91 @@ const ModelTest = ({
                 </div>
               ))} */}
 
-              <div>
+              <Grid container spacing={3}>
                 {mcqs.qsn.answers.map((ans) => (
-                  <div>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="demo-controlled-radio-buttons-group"
-                        name="controlled-radio-buttons-group"
-                        checked={ans.text === mcqs.selectAns}
-                        // value={value}
-                        //  onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          //  value={ans.text}
-                          // disabled
-
-                          control={<Radio />}
-                          label={ans.text}
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      marginBottom: "10px",
+                      marginLeft: "30px",
+                    }}
+                  >
+                    {ans.text === mcqs.selectAns ? (
+                      <FormControl>
+                        {ans.correct === true ? (
+                          <RadioGroup
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            checked={ans.text}
+                          >
+                            <FormControlLabel
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: lightGreen[800],
+                                    "&.Mui-checked": {
+                                      color: lightGreen[800],
+                                    },
+                                  }}
+                                />
+                              }
+                              label={ans.text}
+                            />
+                          </RadioGroup>
+                        ) : (
+                          <RadioGroup
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            checked={ans.text}
+                          >
+                            <FormControlLabel
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: red[800],
+                                    "&.Mui-checked": {
+                                      color: red[800],
+                                    },
+                                  }}
+                                />
+                              }
+                              label={ans.text}
+                            />
+                          </RadioGroup>
+                        )}
+                      </FormControl>
+                    ) : (
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="demo-controlled-radio-buttons-group"
+                          name="controlled-radio-buttons-group"
+                          value={value}
+                          //  onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value={ans.text}
+                            disabled
+                            control={<Radio />}
+                            label={ans.text}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    )}
                   </div>
                 ))}
-              </div>
+              </Grid>
 
               {mcqs.qsn.answers.map((ans) => (
-                <div style={{ color: "#00ff00" }}>
-                  {ans.correct === true && <h6> Answer is :{ans.text}</h6>}
+                <div>
+                  {ans.correct === true && (
+                    <h5 style={{ display: "flex ", flexDirection: "row" }}>
+                      Right Answer{" =>"}
+                      <p style={{ color: "#43a047", marginLeft: "10px" }}>
+                        {" "}
+                        {ans.text}
+                      </p>
+                    </h5>
+                  )}
                 </div>
               ))}
             </div>
