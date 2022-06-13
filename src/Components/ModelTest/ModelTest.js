@@ -114,11 +114,12 @@ const ModelTest = ({
           <p>View The Right ansawers</p>
 
           {questions.map((mcqs) => (
-            <div style={{ textAlign: "left" }}>
+            <div style={{ textAlign: "left" }} key={mcqs.qsn.id}>
               <h5> Question: {mcqs.qsn.question} </h5>
               <Grid container spacing={3}>
                 {mcqs.qsn.answers.map((ans) => (
                   <div
+                    key={mcqs.qsn.id}
                     style={{
                       marginTop: "20px",
                       marginBottom: "10px",
@@ -190,7 +191,7 @@ const ModelTest = ({
               </Grid>
 
               {mcqs.qsn.answers.map((ans) => (
-                <div>
+                <div key={mcqs.qsn.id}>
                   {ans.correct === true && (
                     <h5 style={{ display: "flex ", flexDirection: "row" }}>
                       Right Answer{" =>"}
@@ -221,6 +222,7 @@ const ModelTest = ({
                 {qusdata[currentQuestion].answers.map((answerOption) => (
                   <>
                     <FormControlLabel
+                      key={qusdata.id}
                       onClick={() => setCheckValue(answerOption.correct)}
                       value={answerOption.text}
                       control={<Radio />}
