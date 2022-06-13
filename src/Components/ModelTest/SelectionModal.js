@@ -109,11 +109,17 @@ export default function SelectionModal({
                   sx={{ m: 1, minWidth: 120 }}
                   onChange={handleChange}
                 >
+                  <MenuItem value={5}>Five Minute</MenuItem>
                   <MenuItem value={10}>Ten Minute</MenuItem>
+                  <MenuItem value={15}>Fifteen Minute</MenuItem>
                   <MenuItem value={20}>Twenty Minute</MenuItem>
+                  <MenuItem value={25}>Twenty Five Minute</MenuItem>
                   <MenuItem value={30}>Thirty Minute</MenuItem>
+                  <MenuItem value={35}>Thirty Five Minute</MenuItem>
                   <MenuItem value={40}>Forty Minute</MenuItem>
+                  <MenuItem value={45}>Forty Five Minute</MenuItem>
                   <MenuItem value={50}>Fifty Minute</MenuItem>
+                  <MenuItem value={55}>Fifty Five Minute</MenuItem>
                   <MenuItem value={60}>Sixty Minute </MenuItem>
                 </Select>
                 <FormHelperText>Required</FormHelperText>

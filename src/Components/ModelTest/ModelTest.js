@@ -116,15 +116,15 @@ const ModelTest = ({
           {questions.map((mcqs) => (
             <div style={{ textAlign: "left" }} key={mcqs.qsn.id}>
               <h5> Question: {mcqs.qsn.question} </h5>
-              <Grid container spacing={3}>
+              <div>
                 {mcqs.qsn.answers.map((ans) => (
                   <div
                     key={mcqs.qsn.id}
-                    style={{
+                    /*    style={{
                       marginTop: "20px",
                       marginBottom: "10px",
                       marginLeft: "30px",
-                    }}
+                    }} */
                   >
                     {ans.text === mcqs.selectAns ? (
                       <FormControl>
@@ -188,18 +188,21 @@ const ModelTest = ({
                     )}
                   </div>
                 ))}
-              </Grid>
-
+              </div>
+              
               {mcqs.qsn.answers.map((ans) => (
                 <div key={mcqs.qsn.id}>
-                  {ans.correct === true && (
-                    <h5 style={{ display: "flex ", flexDirection: "row" }}>
-                      Right Answer{" =>"}
-                      <p style={{ color: "#43a047", marginLeft: "10px" }}>
-                        {" "}
-                        {ans.text}
-                      </p>
-                    </h5>
+                  {ans.text !== mcqs.selectAns && (
+                    <div>
+                      {ans.correct === true && (
+                        <h5 style={{ display: "flex ", flexDirection: "row" }}>
+                          Answer:{" "}
+                          <p style={{ color: "#43a047", marginLeft: "10px" }}>
+                            {ans.text}
+                          </p>{" "}
+                        </h5>
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
