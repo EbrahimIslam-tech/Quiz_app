@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import MaterialTimer from "./MaterialTimer";
 const style = {
   position: "absolute",
   top: "50%",
@@ -31,7 +32,8 @@ export default function SelectionModal({
   setTimevalue,
   data,
 }) {
-  const [value, setValue] = useState();
+  // const [timeValue, setTimeValue] = React.useState();
+  const [value, setValue] = React.useState();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,9 +52,9 @@ export default function SelectionModal({
     event.preventDefault();
     setTimevalue(value);
   };
-  const handleChange = (event) => {
+/*   const handleChange = (event) => {
     setValue(event.target.value);
-  };
+  }; */
   return (
     <div>
       <Button
@@ -97,7 +99,7 @@ export default function SelectionModal({
               2. Please select the time you want to need to answer
             </Typography>
             <form onSubmit={handleSubmit} sx={{ mb: 5 }}>
-              <FormControl required sx={{ m: 1, minWidth: 120 }}>
+              {/*     <FormControl required sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel id="demo-simple-select-required-label">
                   Time
                 </InputLabel>
@@ -123,17 +125,19 @@ export default function SelectionModal({
                   <MenuItem value={60}>Sixty Minute </MenuItem>
                 </Select>
                 <FormHelperText>Required</FormHelperText>
-                {value && (
-                  <Button
-                    sx={{ mt: 3, ml: 40 }}
-                    type="submit"
-                    variant="outlined"
-                    onClick={() => handleSubmit()}
-                  >
-                    Start
-                  </Button>
-                )}
-              </FormControl>
+               
+              </FormControl> */}
+              <MaterialTimer value={value} setValue={setValue}></MaterialTimer>
+              {value && (
+                <Button
+                  sx={{ mt: 3, ml: 40 }}
+                  type="submit"
+                  variant="outlined"
+                  onClick={() => handleSubmit()}
+                >
+                  Start
+                </Button>
+              )}
             </form>
           </Box>
         </Fade>

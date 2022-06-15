@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { saveQusAns, saveSelectedAns } from "../../features/qusSlice";
 import { Grid } from "@mui/material";
+import MaterialTimer from "./MaterialTimer";
 
 const ModelTest = ({
   qusnumbervalue,
@@ -24,6 +25,7 @@ const ModelTest = ({
   data,
 }) => {
   const [value, setValue] = useState();
+  console.log(value);
   const { data: qusAnsdata } = useSelector((store) => store.qusAns);
   const dispatch = useDispatch();
   const [checkvalue, setCheckValue] = useState("");
@@ -43,16 +45,22 @@ const ModelTest = ({
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    /*  if (checkvalue === true) {
+      setScore(score + 1);
+      setError(false);
+    } else {
+      setError(true);
+    } */
+    setValue();
+  };
+
+  const handleAnswerOptionClick = (isCorrect) => {
     if (checkvalue === true) {
       setScore(score + 1);
       setError(false);
     } else {
       setError(true);
     }
-    setValue();
-  };
-
-  const handleAnswerOptionClick = (isCorrect) => {
     dispatch(saveQusAns({ qsn: qusdata[currentQuestion], ans: value }));
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < qusdata.length) {
@@ -90,6 +98,7 @@ const ModelTest = ({
           <span>Question No: {currentQuestion + 1}</span>/{qusdata.length}
         </div>
       </div>
+  
 
       {!timeOut && timevalue && (
         <div>
@@ -189,7 +198,7 @@ const ModelTest = ({
                   </div>
                 ))}
               </div>
-              
+
               {mcqs.qsn.answers.map((ans) => (
                 <div key={mcqs.qsn.id}>
                   {ans.text !== mcqs.selectAns && (
